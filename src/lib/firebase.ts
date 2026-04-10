@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { getAuth, indexedDBLocalPersistence, setPersistence } from 'firebase/auth';
 import { initializeFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -14,6 +14,12 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+
+// Set persistence to indexedDBLocalPersistence for better iframe compatibility
+setPersistence(auth, indexedDBLocalPersistence).catch((err) => {
+  console.error("Auth persistence error:", err);
+});
+
 export const db = initializeFirestore(app, {
   experimentalForceLongPolling: true,
 });

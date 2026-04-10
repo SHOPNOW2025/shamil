@@ -159,7 +159,9 @@ export default function AuthPage({ onAuthSuccess }: AuthPageProps) {
       onAuthSuccess();
     } catch (err: any) {
       if (err.code === 'auth/network-request-failed') {
-        setError('خطأ في الاتصال: يرجى التأكد من إضافة رابط التطبيق إلى "Authorized Domains" في Firebase Console، أو تأكد من جودة الإنترنت.');
+        setError(`خطأ في الاتصال: يرجى إضافة الروابط التالية إلى "Authorized Domains" في Firebase Console:
+        1. ais-dev-57citexcxcbweb6zxyrn2x-288988597241.europe-west2.run.app
+        2. ais-pre-57citexcxcbweb6zxyrn2x-288988597241.europe-west2.run.app`);
       } else {
         setError(err.message);
       }

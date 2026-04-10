@@ -25,6 +25,11 @@ export default function App() {
   useEffect(() => {
     let unsubscribeDoc: (() => void) | null = null;
 
+    // Safety timeout: if auth/firestore takes more than 10 seconds, stop loading
+    const timeoutId = setTimeout(() => {
+      setLoading(false);
+    }, 10000);
+
     const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser) => {
       // Clean up previous document listener if it exists
       if (unsubscribeDoc) {
@@ -36,6 +41,7 @@ export default function App() {
         setLoading(true);
         // Listen to user document in Firestore
         unsubscribeDoc = onSnapshot(doc(db, 'users', firebaseUser.uid), (docSnap) => {
+          clearTimeout(timeoutId);
           if (docSnap.exists()) {
             const userData = docSnap.data() as User;
             setCurrentUser({ ...userData, id: firebaseUser.uid });
@@ -46,16 +52,19 @@ export default function App() {
           }
           setLoading(false);
         }, (error) => {
+          clearTimeout(timeoutId);
           console.error("Firestore subscription error:", error);
           setLoading(false);
         });
       } else {
+        clearTimeout(timeoutId);
         setCurrentUser(null);
         setLoading(false);
       }
     });
 
     return () => {
+      clearTimeout(timeoutId);
       unsubscribeAuth();
       if (unsubscribeDoc) unsubscribeDoc();
     };
