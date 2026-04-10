@@ -1,0 +1,89 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "App user profile with wallet and role",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string", "enum": ["USER", "MERCHANT", "DRIVER", "ADMIN"] },
+        "walletBalance": { "type": "number" },
+        "status": { "type": "string", "enum": ["ACTIVE", "SUSPENDED", "PENDING_APPROVAL", "BANNED"] },
+        "avatar": { "type": "string" },
+        "storeName": { "type": "string" },
+        "storeCategory": { "type": "string" },
+        "location": { "type": "object" },
+        "vehicleType": { "type": "string" },
+        "plateNumber": { "type": "string" }
+      },
+      "required": ["name", "email", "role", "walletBalance", "status"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Product sold by merchants",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "price": { "type": "number" },
+        "category": { "type": "string", "enum": ["FOOD", "DRINK", "GROCERY", "VEGETABLES_FRUITS"] },
+        "image": { "type": "string" },
+        "merchantId": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "required": ["name", "price", "category", "merchantId"]
+    },
+    "RideRequest": {
+      "title": "RideRequest",
+      "description": "Passenger or item delivery request",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "driverId": { "type": "string" },
+        "startLocation": { "type": "object" },
+        "endLocation": { "type": "object" },
+        "maxPrice": { "type": "number" },
+        "estimatedPrice": { "type": "number" },
+        "status": { "type": "string", "enum": ["PENDING", "ACCEPTED", "STARTED", "COMPLETED", "CANCELLED"] },
+        "type": { "type": "string", "enum": ["PASSENGER", "ITEM"] },
+        "distance": { "type": "number" },
+        "duration": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "startLocation", "endLocation", "status", "type", "createdAt"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Product order from merchant",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "merchantId": { "type": "string" },
+        "driverId": { "type": "string" },
+        "items": { "type": "array" },
+        "totalPrice": { "type": "number" },
+        "status": { "type": "string", "enum": ["PENDING", "PREPARING", "WAITING_FOR_DRIVER", "ON_THE_WAY", "DELIVERED", "CANCELLED"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "merchantId", "items", "totalPrice", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Store products"
+    },
+    "/rides/{rideId}": {
+      "schema": "RideRequest",
+      "description": "Ride and delivery requests"
+    },
+    "/orders/{orderId}": {
+      "schema": "Order",
+      "description": "Product orders"
+    }
+  }
+}
