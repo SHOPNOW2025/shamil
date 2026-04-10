@@ -64,7 +64,7 @@ export default function Layout({ children, activeRole, onRoleChange, userName, b
         <div className="flex items-center gap-3">
           <div className="text-left">
             <div className="text-xs text-slate-500">المحفظة</div>
-            <div className="font-bold text-brand-accent">{balance.toFixed(2)} د.أ</div>
+            <div className="font-bold text-brand-accent">{(balance || 0).toFixed(2)} د.أ</div>
           </div>
           <button className="p-2 hover:bg-slate-100 rounded-full relative">
             <Bell className="w-5 h-5 text-slate-600" />
@@ -182,7 +182,7 @@ export default function Layout({ children, activeRole, onRoleChange, userName, b
               <Wallet className="w-5 h-5 text-brand-accent" />
               <div className="flex flex-col">
                 <span className="text-[10px] text-slate-500 leading-none">الرصيد الحالي</span>
-                <span className="font-bold text-slate-900">{balance.toFixed(2)} د.أ</span>
+                <span className="font-bold text-slate-900">{(balance || 0).toFixed(2)} د.أ</span>
               </div>
             </div>
             <button className="p-2 hover:bg-slate-100 rounded-full relative">
